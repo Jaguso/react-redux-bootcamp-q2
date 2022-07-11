@@ -15,39 +15,35 @@ export const Cart = () => {
     setCartProducts(productsSlice)
   }, [])
 
-  const setProductQuantity = (plusOrMinus, itemId) => {
-    switch(plusOrMinus) {
-      case 'minus':
-        console.log('test')
-        const minusUpdatedCartProducts = cartProducts.map(cartProductObj => {
-          if (itemId === cartProductObj.id && cartProductObj.quantity !== 1) {
-            return {
-              ...cartProductObj,
-              quantity: cartProductObj.quantity - 1
-            };
-          } else {
-            return cartProductObj;
-          }
-        });
-        setCartProducts(minusUpdatedCartProducts);
-        return;
-      case 'plus':
-        const updatedCartProducts = cartProducts.map(cartProductObj => {
-          if (itemId === cartProductObj.id) {
-            return {
-              ...cartProductObj,
-              quantity: cartProductObj.quantity + 1
-            };
-          } else {
-            return cartProductObj;
-          }
-        });
-        setCartProducts(updatedCartProducts);
-        return;
-      default:
-        return;
-    }
+
+  const handlePlusOne = (itemId) => {
+    const updatedCartProducts = cartProducts.map(cartProductObj => {
+      if (itemId === cartProductObj.id) {
+        return {
+          ...cartProductObj,
+          quantity: cartProductObj.quantity + 1
+        };
+      } else {
+        return cartProductObj;
+      }
+    });
+    setCartProducts(updatedCartProducts);
   }
+
+  const handleMinusOne = (itemId) => {
+    const updatedCartProducts = cartProducts.map(cartProductObj => {
+      if (itemId === cartProductObj.id && cartProductObj.quantity !== 1) {
+        return {
+          ...cartProductObj,
+          quantity: cartProductObj.quantity - 1
+        };
+      } else {
+        return cartProductObj;
+      }
+    });
+    setCartProducts(updatedCartProducts);
+  }
+
 
   console.log('cartProducts', cartProducts)
   return (
@@ -71,7 +67,12 @@ export const Cart = () => {
           </GenericTag>
         </Tags>
         {cartProducts.map((item, i) => (
-          <CartItem key={i} item={item} setProductQuantity={setProductQuantity}/>
+          <CartItem 
+            key={i} 
+            item={item} 
+            handlePlusOne={handlePlusOne}
+            handleMinusOne={handleMinusOne}
+          />
         ))}
       </LeftContainer>
       <RightContainer>

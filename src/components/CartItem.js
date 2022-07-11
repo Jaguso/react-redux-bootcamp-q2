@@ -13,9 +13,9 @@ function CartItem(props) {
       </ProdDetail>
       <Generic>
         <Quantity>
-          <Button onClick={() => props.setProductQuantity('minus', item.id)}>-</Button>
+          <Button onClick={() => props.handleMinusOne(item.id)}>-</Button>
           <QuantityText>{item.quantity}</QuantityText>
-          <Button onClick={() => props.setProductQuantity('plus', item.id)}>+</Button>
+          <Button onClick={() => props.handlePlusOne(item.id)}>+</Button>
         </Quantity>
         <Button>Delete</Button>
       </Generic>
