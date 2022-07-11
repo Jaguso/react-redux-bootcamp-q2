@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CartItem from '../components/CartItem';
-import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title } from '../styles/pages/Cart.styles';
+import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title, Summary, CostText, CheckoutBtn } from '../styles/pages/Cart.styles';
 import { data } from '../utils/mockData';
 
 export const Cart = () => {
@@ -44,8 +44,15 @@ export const Cart = () => {
     setCartProducts(updatedCartProducts);
   }
 
+  const totalItems = cartProducts.reduce((sum, item) => {
+    return sum + (item.quantity)
+  }, 0)
 
-  console.log('cartProducts', cartProducts)
+  const totalCost = cartProducts.reduce((sum, item) => {
+    return sum + (item.price * item.quantity)
+  }, 0).toFixed(2)
+
+
   return (
     <Main>
       <LeftContainer>
@@ -76,9 +83,12 @@ export const Cart = () => {
         ))}
       </LeftContainer>
       <RightContainer>
-        <p>Summary</p>
-        <p>Items</p>
-        <p>Total Cost</p>
+        <Summary>
+          <Title>Summary</Title>
+          <p>Items {totalItems}</p>
+          <CostText>Total Cost <br></br> ${totalCost}</CostText>
+          <CheckoutBtn>Checkout</CheckoutBtn>
+        </Summary>
       </RightContainer>
     </Main>
   )

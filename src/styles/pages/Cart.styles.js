@@ -14,9 +14,8 @@ export const LeftContainer = styled.div`
 
 export const RightContainer = styled.div`
   width: 20%;
-  height: 100%;
+  height: 90vh;
   min-width: 100px;
-  border: gray 1px solid;
 `
 
 export const Tags = styled.div`
@@ -54,4 +53,28 @@ export const Text = styled.p`
 export const Title = styled.h2`
   font-weight: bold;
   font-size: 18px;
+`
+
+export const Summary = styled.div`
+  margin-top: 50px;
+  margin-left: 10%;
+  padding-bottom: 30px;
+  width: 80%;
+  background-color: rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+export const CostText = styled.p`
+  line-height: 2;
+`
+
+export const CheckoutBtn = styled.button`
+  height: 50px;
+  width: 70%;
+  cursor: pointer;
+  background-color: rgb(32, 52, 73);
+  color: #ffffff;
 `

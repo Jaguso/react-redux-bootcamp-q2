@@ -17,7 +17,7 @@ function CartItem(props) {
           <QuantityText>{item.quantity}</QuantityText>
           <Button onClick={() => props.handlePlusOne(item.id)}>+</Button>
         </Quantity>
-        <Button>Delete</Button>
+        <Button>Remove</Button>
       </Generic>
       <Generic>
         <p>${item.price}</p>
