@@ -2,17 +2,24 @@ import React, { useEffect, useState } from 'react';
 import CartItem from '../components/CartItem';
 import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title, Summary, CostText, CheckoutBtn } from '../styles/pages/Cart.styles';
 import { data } from '../utils/mockData';
+import { useHistory } from "react-router-dom";
+
 
 export const Cart = () => {
-
+  let history = useHistory();
   const [cartProducts, setCartProducts] = useState([]);
 
   useEffect(() => {
-    const productsSlice = data.data.products.items.slice(0,5);
-    for (let item of productsSlice) {
-      item['quantity'] = 1
+    const id = JSON.parse(localStorage.getItem('userId'));
+    if (!id) {
+      history.push('/login')
+    } else {
+      const productsSlice = data.data.products.items.slice(0,5);
+      for (let item of productsSlice) {
+        item['quantity'] = 1
+      }
+      setCartProducts(productsSlice)
     }
-    setCartProducts(productsSlice)
   }, [])
 
 
