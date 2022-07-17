@@ -13,7 +13,7 @@ export const cartSlice = createSlice({
       }
       state.cartProducts.push(productObj);
     },
-    handleAddOneQuantity: (state, action) => {
+    addOneToQuantity: (state, action) => {
       state.cartProducts = action.payload.products.map(cartProductObj => {
         if (action.payload.id === cartProductObj.id) {
           return {
@@ -25,7 +25,7 @@ export const cartSlice = createSlice({
         }
       });
     },
-    handleRestOneQuantity: (state, action) => {
+    restOneToQuantity: (state, action) => {
       state.cartProducts = action.payload.products.map(cartProductObj => {
         if (action.payload.id === cartProductObj.id && cartProductObj.quantity !== 1) {
           return {
@@ -36,11 +36,14 @@ export const cartSlice = createSlice({
           return cartProductObj;
         }
       });
+    },
+    deleteProductFromCart: (state, action) => {
+      state.cartProducts = action.payload.products.filter(item => item.id !== action.payload.id);
     }
   }
 });
 
-export const { addProductToCart, handleAddOneQuantity, handleRestOneQuantity } = cartSlice.actions;
+export const { addProductToCart, addOneToQuantity, restOneToQuantity, deleteProductFromCart } = cartSlice.actions;
 
 export const selectCartProducts = (state) => state.cart.cartProducts;
 

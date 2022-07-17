@@ -1,7 +1,7 @@
 import { Main, ProductImg, InnerContainer, NameText, AddToCartBtn, InnerTop, InnerBottom, CatText, PriceText } from '../styles/components/ProductCard.styles';
 import { addProductToCart } from '../redux/slices/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCartProducts, handleAddOneQuantity } from '../redux/slices/cartSlice';
+import { selectCartProducts, addOneToQuantity } from '../redux/slices/cartSlice';
 
 
 export const ProductCard = ({productObj}) => {
@@ -15,7 +15,7 @@ export const ProductCard = ({productObj}) => {
         id: productObj.id,
         products: cartProducts
       }
-      dispatch(handleAddOneQuantity(dataForUpdate))
+      dispatch(addOneToQuantity(dataForUpdate))
     } else {
       dispatch(addProductToCart(productObj))
     }
