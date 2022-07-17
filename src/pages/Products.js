@@ -11,8 +11,6 @@ export const Products = () => {
   const dispatch = useDispatch();
   const products = useSelector(selectAllProducts);
   const loading = useSelector(selectLoading);
-  
-
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem('userId'));
@@ -30,7 +28,7 @@ export const Products = () => {
       </Loading>
     )
   }
-  
+
   return (
     <Main>
       <ProductsContainer>

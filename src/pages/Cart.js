@@ -3,22 +3,27 @@ import CartItem from '../components/CartItem';
 import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title, Summary, CostText, CheckoutBtn } from '../styles/pages/Cart.styles';
 import { data } from '../utils/mockData';
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCartProducts } from '../redux/slices/cartSlice';
 
 
 export const Cart = () => {
   let history = useHistory();
-  const [cartProducts, setCartProducts] = useState([]);
+  const dispatch = useDispatch();
+  const cartProducts = useSelector(selectCartProducts);
+  // const [cartProducts, setCartProducts] = useState([]);
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem('userId'));
     if (!id) {
       history.push('/login')
     } else {
-      const productsSlice = data.data.products.items.slice(0,5);
-      for (let item of productsSlice) {
-        item['quantity'] = 1
-      }
-      setCartProducts(productsSlice)
+      
+      // const productsSlice = data.data.products.items.slice(0,5);
+      // for (let item of productsSlice) {
+      //   item['quantity'] = 1
+      // }
+      // setCartProducts(productsSlice)
     }
   }, [])
 
@@ -34,7 +39,7 @@ export const Cart = () => {
         return cartProductObj;
       }
     });
-    setCartProducts(updatedCartProducts);
+    // setCartProducts(updatedCartProducts);
   }
 
   const handleMinusOne = (itemId) => {
@@ -48,17 +53,21 @@ export const Cart = () => {
         return cartProductObj;
       }
     });
-    setCartProducts(updatedCartProducts);
+    // setCartProducts(updatedCartProducts);
   }
 
-  const totalItems = cartProducts.reduce((sum, item) => {
-    return sum + (item.quantity)
-  }, 0)
+  const totalItems = 1
+  // cartProducts.reduce((sum, item) => {
+  //   return sum + (item.quantity)
+  // }, 0)
 
-  const totalCost = cartProducts.reduce((sum, item) => {
-    return sum + (item.price * item.quantity)
-  }, 0).toFixed(2)
+  const totalCost = 1
+  // cartProducts.reduce((sum, item) => {
+  //   return sum + (item.price * item.quantity)
+  // }, 0).toFixed(2)
 
+
+  console.log('cart-prods', cartProducts)
 
   return (
     <Main>
