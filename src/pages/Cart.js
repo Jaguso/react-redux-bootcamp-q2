@@ -3,13 +3,14 @@ import CartItem from '../components/CartItem';
 import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title, Summary, CostText, CheckoutBtn } from '../styles/pages/Cart.styles';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCartProducts } from '../redux/slices/cartSlice';
+import { selectCartProducts, selectOrderData, postOrder } from '../redux/slices/cartSlice';
 
 
 export const Cart = () => {
   let history = useHistory();
   const dispatch = useDispatch();
   const cartProducts = useSelector(selectCartProducts);
+  const orderData = useSelector(selectOrderData)
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem('userId'));
@@ -17,6 +18,13 @@ export const Cart = () => {
       history.push('/login')
     }
   }, []);
+
+  const handleCheckout = () => {
+    if (cartProducts.length>0) {
+      dispatch(postOrder())
+      console.log('data', orderData)
+    }
+  }
 
   const totalItems = cartProducts.reduce((sum, item) => {
     return sum + (item.quantity)
@@ -26,8 +34,14 @@ export const Cart = () => {
     return sum + (item.price * item.quantity)
   }, 0).toFixed(2)
 
-
-  console.log('cart-prods', cartProducts)
+  if (orderData) {
+    return (
+      <div>
+        <p>{orderData.message}</p>
+        <p>Order number: {orderData.order}</p>
+      </div>
+    )
+  }
 
   return (
     <Main>
@@ -61,7 +75,7 @@ export const Cart = () => {
           <Title>Summary</Title>
           <p>Items {totalItems}</p>
           <CostText>Total Cost <br></br> ${totalCost}</CostText>
-          <CheckoutBtn>Checkout</CheckoutBtn>
+          <CheckoutBtn onClick={handleCheckout}>Checkout</CheckoutBtn>
         </Summary>
       </RightContainer>
     </Main>

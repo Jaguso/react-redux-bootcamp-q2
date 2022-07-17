@@ -12,6 +12,7 @@ function CartItem(props) {
     id: item.id,
     products: cartProducts
   }
+  
   return (
     <Main>
       <Img>
