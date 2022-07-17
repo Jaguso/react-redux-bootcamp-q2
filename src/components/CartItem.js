@@ -1,8 +1,17 @@
 import { Main, CartItemImg, Img, ProdDetail, Generic, Quantity, QuantityText, Button } from '../styles/components/CartItem.styles';
+import { handleAddOneQuantity, handleRestOneQuantity, selectCartProducts }  from '../redux/slices/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 function CartItem(props) {
   const { item } = props;
+  const dispatch = useDispatch();
+  const cartProducts = useSelector(selectCartProducts);
+
+  const dataForUpdate = {
+    id: item.id,
+    products: cartProducts
+  }
   return (
     <Main>
       <Img>
@@ -13,9 +22,9 @@ function CartItem(props) {
       </ProdDetail>
       <Generic>
         <Quantity>
-          <Button onClick={() => props.handleMinusOne(item.id)}>-</Button>
+          <Button onClick={() => dispatch(handleRestOneQuantity(dataForUpdate))}>-</Button>
           <QuantityText>{item.quantity}</QuantityText>
-          <Button onClick={() => props.handlePlusOne(item.id)}>+</Button>
+          <Button onClick={() => dispatch(handleAddOneQuantity(dataForUpdate))}>+</Button>
         </Quantity>
         <Button>Remove</Button>
       </Generic>
