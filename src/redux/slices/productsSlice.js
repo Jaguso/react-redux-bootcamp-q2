@@ -9,7 +9,7 @@ export const getProducts = createAsyncThunk(
       const response = await fetch(`${URL}/products/`, {
         method: 'GET',
         headers: {
-          "x-api-key": "lRjxbZfT7i8j77wfef4x75xKvODmnx415yRsYEV5"
+          'x-api-key': process.env.REACT_APP_API_KEY
         }
       });
       const data = await response.json();
@@ -25,16 +25,17 @@ export const productsSlice = createSlice({
   name: "products",
   initialState: {
     products: [],
-    loading: false
+    loading: true
   }, extraReducers: (builder) => {
     builder
       .addCase(getProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload;
+        state.products = action.payload.items;
       })
   }
 });
 
 export const selectAllProducts = (state) => state.products.products;
+export const selectLoading = (state) => state.products.loading;
 
 export default productsSlice.reducer;
