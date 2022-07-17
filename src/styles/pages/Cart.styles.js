@@ -77,3 +77,12 @@ export const CheckoutBtn = styled.button`
   background-color: rgb(32, 52, 73);
   color: #ffffff;
 `
+
+export const Order = styled.div`
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`

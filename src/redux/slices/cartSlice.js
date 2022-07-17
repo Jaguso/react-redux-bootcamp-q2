@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const URL = 'https://6x8prpit9f.execute-api.us-east-1.amazonaws.com/api/';
+const URL = 'https://6x8prpit9f.execute-api.us-east-1.amazonaws.com/api';
 
 export const postOrder = createAsyncThunk(
   "cart/postOrder",
-  async (_, thunkAPI) => {
+  async (_, {rejectWithValue}) => {
     try {
       const response = await fetch(`${URL}/orders/`, {
         method: 'POST',
@@ -15,7 +15,7 @@ export const postOrder = createAsyncThunk(
       const data = await response.json();
       return data; 
     } catch(error) {
-
+      return rejectWithValue('Ocurrió un error, intenta más tarde.');
     }
   }
 )
@@ -24,7 +24,8 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState: {
     cartProducts: [],
-    orderData: null
+    orderData: null,
+    orderError: null
   },
   reducers: {
     addProductToCart: (state, action) => {
@@ -60,6 +61,10 @@ export const cartSlice = createSlice({
     },
     deleteProductFromCart: (state, action) => {
       state.cartProducts = action.payload.products.filter(item => item.id !== action.payload.id);
+    },
+    cleanOrderData: (state, action) => {
+      state.orderData = null;
+      state.orderError = null;
     }
   },
   extraReducers: (builder) => {
@@ -68,12 +73,16 @@ export const cartSlice = createSlice({
         state.orderData = action.payload
         state.cartProducts = []
       })
+      .addCase(postOrder.rejected, (state, action) => {
+        state.orderError = action.payload
+      })
   }
 });
 
-export const { addProductToCart, addOneToQuantity, restOneToQuantity, deleteProductFromCart } = cartSlice.actions;
+export const { addProductToCart, addOneToQuantity, restOneToQuantity, deleteProductFromCart, cleanOrderData } = cartSlice.actions;
 
 export const selectCartProducts = (state) => state.cart.cartProducts;
 export const selectOrderData = (state) => state.cart.orderData;
+export const selectOrderError = (state) => state.cart.orderError;
 
 export default cartSlice.reducer;

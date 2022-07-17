@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import CartItem from '../components/CartItem';
-import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title, Summary, CostText, CheckoutBtn } from '../styles/pages/Cart.styles';
+import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title, Summary, CostText, CheckoutBtn, Order } from '../styles/pages/Cart.styles';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCartProducts, selectOrderData, postOrder } from '../redux/slices/cartSlice';
+import { selectCartProducts, selectOrderData, postOrder, cleanOrderData, selectOrderError } from '../redux/slices/cartSlice';
 
 
 export const Cart = () => {
@@ -11,18 +11,22 @@ export const Cart = () => {
   const dispatch = useDispatch();
   const cartProducts = useSelector(selectCartProducts);
   const orderData = useSelector(selectOrderData)
+  const orderError = useSelector(selectOrderError)
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem('userId'));
     if (!id) {
       history.push('/login')
     }
+    return () => {
+      dispatch(cleanOrderData())
+    }
   }, []);
+
 
   const handleCheckout = () => {
     if (cartProducts.length>0) {
       dispatch(postOrder())
-      console.log('data', orderData)
     }
   }
 
@@ -36,10 +40,18 @@ export const Cart = () => {
 
   if (orderData) {
     return (
-      <div>
-        <p>{orderData.message}</p>
+      <Order>
+        <Title>{orderData.message}</Title>
         <p>Order number: {orderData.order}</p>
-      </div>
+      </Order>
+    )
+  }
+
+  if (orderError) {
+    return (
+      <Order>
+        <p>{orderError}</p>
+      </Order>
     )
   }
 
