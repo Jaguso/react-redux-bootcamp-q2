@@ -9,7 +9,8 @@ export const postOrder = createAsyncThunk(
       const response = await fetch(`${URL}/orders/`, {
         method: 'POST',
         headers: {
-          'x-api-key': process.env.REACT_APP_API_KEY
+          // 'x-api-key': process.env.REACT_APP_API_KEY
+          'x-api-key': 'lRjxbZfT7i8j77wfef4x75xKvODmnx415yRsYEV5'
         }
       })
       const data = await response.json();
