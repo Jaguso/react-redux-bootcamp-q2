@@ -1,22 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { Main, ProductsContainer } from '../styles/pages/Products.styles';
-import { data } from '../utils/mockData';
+import { Main, ProductsContainer, Loading } from '../styles/pages/Products.styles';
 import { ProductCard } from '../components/ProductCard';
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAllProducts, getProducts, selectLoading } from '../redux/slices/productsSlice';
 
 
 export const Products = () => {
   let history = useHistory();
-  const [products, setProducts] = useState([])
+  const dispatch = useDispatch();
+  const products = useSelector(selectAllProducts);
+  const loading = useSelector(selectLoading);
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem('userId'));
     if (!id) {
       history.push('/login')
     } else {
-      setProducts(data.data.products.items)
+      dispatch(getProducts());
     }
-  }, [])
+  }, []);
+
+  if (loading) {
+    return (
+      <Loading>
+        <p>Loading...</p>
+      </Loading>
+    )
+  }
 
   return (
     <Main>

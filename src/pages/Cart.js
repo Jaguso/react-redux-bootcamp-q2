@@ -1,54 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import CartItem from '../components/CartItem';
-import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title, Summary, CostText, CheckoutBtn } from '../styles/pages/Cart.styles';
-import { data } from '../utils/mockData';
+import { Main, LeftContainer, RightContainer, Tags, EmptyTag, DetailTag, GenericTag, Text, Title, Summary, CostText, CheckoutBtn, Order } from '../styles/pages/Cart.styles';
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCartProducts, selectOrderData, postOrder, cleanOrderData, selectOrderError } from '../redux/slices/cartSlice';
 
 
 export const Cart = () => {
   let history = useHistory();
-  const [cartProducts, setCartProducts] = useState([]);
+  const dispatch = useDispatch();
+  const cartProducts = useSelector(selectCartProducts);
+  const orderData = useSelector(selectOrderData)
+  const orderError = useSelector(selectOrderError)
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem('userId'));
     if (!id) {
       history.push('/login')
-    } else {
-      const productsSlice = data.data.products.items.slice(0,5);
-      for (let item of productsSlice) {
-        item['quantity'] = 1
-      }
-      setCartProducts(productsSlice)
     }
-  }, [])
+    return () => {
+      dispatch(cleanOrderData())
+    }
+  }, []);
 
 
-  const handlePlusOne = (itemId) => {
-    const updatedCartProducts = cartProducts.map(cartProductObj => {
-      if (itemId === cartProductObj.id) {
-        return {
-          ...cartProductObj,
-          quantity: cartProductObj.quantity + 1
-        };
-      } else {
-        return cartProductObj;
-      }
-    });
-    setCartProducts(updatedCartProducts);
-  }
-
-  const handleMinusOne = (itemId) => {
-    const updatedCartProducts = cartProducts.map(cartProductObj => {
-      if (itemId === cartProductObj.id && cartProductObj.quantity !== 1) {
-        return {
-          ...cartProductObj,
-          quantity: cartProductObj.quantity - 1
-        };
-      } else {
-        return cartProductObj;
-      }
-    });
-    setCartProducts(updatedCartProducts);
+  const handleCheckout = () => {
+    if (cartProducts.length>0) {
+      dispatch(postOrder())
+    }
   }
 
   const totalItems = cartProducts.reduce((sum, item) => {
@@ -59,6 +38,22 @@ export const Cart = () => {
     return sum + (item.price * item.quantity)
   }, 0).toFixed(2)
 
+  if (orderData) {
+    return (
+      <Order>
+        <Title>{orderData.message}</Title>
+        <p>Order number: {orderData.order}</p>
+      </Order>
+    )
+  }
+
+  if (orderError) {
+    return (
+      <Order>
+        <p>{orderError}</p>
+      </Order>
+    )
+  }
 
   return (
     <Main>
@@ -84,8 +79,6 @@ export const Cart = () => {
           <CartItem 
             key={i} 
             item={item} 
-            handlePlusOne={handlePlusOne}
-            handleMinusOne={handleMinusOne}
           />
         ))}
       </LeftContainer>
@@ -94,7 +87,7 @@ export const Cart = () => {
           <Title>Summary</Title>
           <p>Items {totalItems}</p>
           <CostText>Total Cost <br></br> ${totalCost}</CostText>
-          <CheckoutBtn>Checkout</CheckoutBtn>
+          <CheckoutBtn onClick={handleCheckout}>Checkout</CheckoutBtn>
         </Summary>
       </RightContainer>
     </Main>

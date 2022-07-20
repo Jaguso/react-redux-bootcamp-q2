@@ -10,3 +10,12 @@ export const ProductsContainer = styled.div `
   display: flex;
   flex-wrap: wrap;
 `;
+
+
+export const Loading = styled.div`
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
